@@ -1,0 +1,91 @@
+https://stackoverflow.com/questions/2596714/why-does-python-print-unicode-characters-when-the-default-encoding-is-ascii
+
+=============
+Question
+=============
+From the Python 2.6 shell:
+```
+>>> import sys
+>>> print sys.getdefaultencoding()
+ascii
+>>> print u'\xe9'
+é
+>>> 
+```
+
+I expected to have either some gibberish or an Error after the print statement, since the "é" character isn't part of ASCII and I haven't specified an encoding. I guess I don't understand what ASCII being the default encoding means.
+
+=============
+Answer
+=============
+Thanks to bits and pieces from various replies, I think we can stitch up an explanation.
+
+By trying to print an unicode string, u'\xe9', Python implicitly try to encode that string using the encoding scheme currently stored in sys.stdout.encoding. Python actually picks up this setting from the environment it's been initiated from. If it can't find a proper encoding from the environment, only then does it revert to its default, ASCII.
+
+For example, I use a bash shell which encoding defaults to UTF-8. If I start Python from it, it picks up and use that setting:
+
+$ python
+
+>>> import sys
+>>> print sys.stdout.encoding
+UTF-8
+Let's for a moment exit the Python shell and set bash's environment with some bogus encoding:
+
+$ export LC_CTYPE=klingon
+# we should get some error message here, just ignore it.
+Then start the python shell again and verify that it does indeed revert to its default ascii encoding.
+
+$ python
+
+>>> import sys
+>>> print sys.stdout.encoding
+ANSI_X3.4-1968
+Bingo!
+
+If you now try to output some unicode character outside of ascii you should get a nice error message
+
+>>> print u'\xe9'
+UnicodeEncodeError: 'ascii' codec can't encode character u'\xe9' 
+in position 0: ordinal not in range(128)
+Lets exit Python and discard the bash shell.
+
+We'll now observe what happens after Python outputs strings. For this we'll first start a bash shell within a graphic terminal (I use Gnome Terminal) and we'll set the terminal to decode output with ISO-8859-1 aka latin-1 (graphic terminals usually have an option to Set Character Encoding in one of their dropdown menus). Note that this doesn't change the actual shell environment's encoding, it only changes the way the terminal itself will decode output it's given, a bit like a web browser does. You can therefore change the terminal's encoding, independantly from the shell's environment. Let's then start Python from the shell and verify that sys.stdout.encoding is set to the shell environment's encoding (UTF-8 for me):
+
+$ python
+
+>>> import sys
+
+>>> print sys.stdout.encoding
+UTF-8
+
+>>> print '\xe9' # (1)
+é
+>>> print u'\xe9' # (2)
+Ã©
+>>> print u'\xe9'.encode('latin-1') # (3)
+é
+>>>
+(1) python outputs binary string as is, terminal receives it and tries to match its value with latin-1 character map. In latin-1, 0xe9 or 233 yields the character "é" and so that's what the terminal displays.
+
+(2) python attempts to implicitly encode the Unicode string with whatever scheme is currently set in sys.stdout.encoding, in this instance it's "UTF-8". After UTF-8 encoding, the resulting binary string is '\xc3\xa9' (see later explanation). Terminal receives the stream as such and tries to decode 0xc3a9 using latin-1, but latin-1 goes from 0 to 255 and so, only decodes streams 1 byte at a time. 0xc3a9 is 2 bytes long, latin-1 decoder therefore interprets it as 0xc3 (195) and 0xa9 (169) and that yields 2 characters: Ã and ©.
+
+(3) python encodes unicode code point u'\xe9' (233) with the latin-1 scheme. Turns out latin-1 code points range is 0-255 and points to the exact same character as Unicode within that range. Therefore, Unicode code points in that range will yield the same value when encoded in latin-1. So u'\xe9' (233) encoded in latin-1 will also yields the binary string '\xe9'. Terminal receives that value and tries to match it on the latin-1 character map. Just like case (1), it yields "é" and that's what's displayed.
+
+Let's now change the terminal's encoding settings to UTF-8 from the dropdown menu (like you would change your web browser's encoding settings). No need to stop Python or restart the shell. The terminal's encoding now matches Python's. Let's try printing again:
+
+>>> print '\xe9' # (4)
+
+>>> print u'\xe9' # (5)
+é
+>>> print u'\xe9'.encode('latin-1') # (6)
+
+>>>
+(4) python outputs a binary string as is. Terminal attempts to decode that stream with UTF-8. But UTF-8 doesn't understand the value 0xe9 (see later explanation) and is therefore unable to convert it to a unicode code point. No code point found, no character printed.
+
+(5) python attempts to implicitly encode the Unicode string with whatever's in sys.stdout.encoding. Still "UTF-8". The resulting binary string is '\xc3\xa9'. Terminal receives the stream and attempts to decode 0xc3a9 also using UTF-8. It yields back code value 0xe9 (233), which on the Unicode character map points to the symbol "é". Terminal displays "é".
+
+(6) python encodes unicode string with latin-1, it yields a binary string with the same value '\xe9'. Again, for the terminal this is pretty much the same as case (4).
+
+Conclusions: - Python outputs non-unicode strings as raw data, without considering its default encoding. The terminal just happens to display them if its current encoding matches the data. - Python outputs Unicode strings after encoding them using the scheme specified in sys.stdout.encoding. - Python gets that setting from the shell's environment. - the terminal displays output according to its own encoding settings. - the terminal's encoding is independant from the shell's.
+
+

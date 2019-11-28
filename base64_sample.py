@@ -1,0 +1,20 @@
+import base64
+#import paramiko
+#import StringIO
+
+path = '/Users/son/.ssh/id_rsa'
+
+encoded = ''
+
+with open(path, "rb") as fd:
+    encoded = base64.b64encode(fd.read())
+    print(type(encoded))
+    print(encoded)
+
+
+encoded = "ZDExZjY3NjBiNDUyNzk3Njg1OWFiZjc4OTZiZjUxZmIsMGYwYmNkYjAtMzJhNS01NjlhLWFmZWUtOWVmMTFiMTBhNTIzLDIwMTgtMDQtMDYgMDc6NTM6MjUuNDEyLDFlNzEwMjg1LTU0OGYtNTk2Ni1iYjkyLTUxYzQ3ZDNhNmRkZCxhcm46YXdzOnNuczphcC1ub3J0aGVhc3QtMTo3NTk1NDkxNjYwNzQ6ZW5kcG9pbnQvQVBOUy9GaU5DLWlPUy1Qcm9kdWN0aW9uLzQzYmNlMTc4LTk4YWEtMzkzZS04NjVkLTFmOWUwMmQ2YjZjOSwzOCwxLDViNGZmNGJkMTJiNDMyODc2OTI3NDlkMmZhZjY0ZmYzZDdiOGRjNDAwMGQwNmEyMjVjMzJmM2Y4YzVlNTVkMzEsMjAwLFNVQ0NFU1MKYzJlNGNmNGJiZmNlMzNiYmQwODE4YzYyN2VkMWQ5MmMsZjAwZjdlZTYtMmJiNS01M2YyLTk1OTItMmRhNzAyMDBkYjJkLDIwMTgtMDQtMDYgMDc6NTM6MjUuODIyLGE5YTk4Y2UxLTBlMTktNWRmNC04OThkLWRmYTAyN2FjYTk0Zixhcm46YXdzOnNuczphcC1ub3J0aGVhc3QtMTo3NTk1NDkxNjYwNzQ6ZW5kcG9pbnQvQVBOUy9GaU5DLWlPUy1Qcm9kdWN0aW9uL2M0MmY4MmU0LWY0MTAtMzRiNi04NTcyLWMzNTRhYTUzMDg0MywyMywxLGIxYjM1ZWVlMDUyYzAyMTJhMjg0ODI0ODQzYjZjY2NiZmQ4YjIxNGI3YzE1OTM2OWZlZjQ5OWI1MjhiYTExODgsMjAwLFNVQ0NFU1M="
+
+keydata = base64.b64decode(encoded).decode("utf-8")
+print(keydata)
+#pkey = paramiko.RSAKey.from_private_key(StringIO.StringIO(keydata))
+#print(pkey)

@@ -1,0 +1,6 @@
+services:
+  - service_name: RequlMobile
+    long_run_jobs:
+      - Job1
+      - Job2
+  - service_name: Lifelog

@@ -1,0 +1,15 @@
+supervisor> status
+clock                            RUNNING   pid 21792, uptime 0:15:08
+supervisor> tail -f clock
+==> Press Ctrl-C to exit <==
+b':29:33\n21:29:34\n21:29:35\n21:29:36\n21:29:37\n21:29:38\n21:29:39\n21:29:40\n21:29:41\n21:29:42\n21:29:43\n21:29:44\n21:29:45\n21:29:46\n21:29:47\n21:29:48\n21:29:49\n21:29:50\n21:29:51\n21:29:52\n21:29:53\n21:29:54\n21:29:55\n21:29:56\n21:29:57\n21:29:58\n21:29:59\n21:30:00\n21:30:01\n21:30:02\n21:30:03\n21:30:04\n21:30:05\n21:30:06\n21:30:07\n21:30:08\n21:30:09\n21:30:10\n21:30:11\n21:30:12\n21:30:13\n21:30:14\n21:30:15\n21:30:16\n21:30:17\n21:30:18\n21:30:19\n21:30:20\n21:30:21\n21:30:22\n21:30:23\n21:30:24\n21:30:25\n21:30:26\n21:30:27\n21:30:28\n21:30:29\n21:30:30\n21:30:31\n21:30:32\n21:30:33\n21:30:34\n21:30:35\n21:30:36\n21:30:37\n21:30:38\n21:30:39\n21:30:40\n21:30:41\n21:30:42\n21:30:43\n21:30:44\n21:30:45\n21:30:46\n21:30:47\n21:30:48\n21:30:49\n21:30:50\n21:30:51\n21:30:52\n21:30:53\n21:30:54\n21:30:55\n21:30:56\n21:30:57\n21:30:58\n21:30:59\n21:31:00\n21:31:01\n21:31:02\n21:31:03\n21:31:04\n21:31:05\n21:31:06\n21:31:07\n21:31:08\n21:31:09\n21:31:10\n21:31:11\n21:31:12\n21:31:13\n21:31:14\n21:3http://127.0.0.1:9001/logtail/clock/stdout Cannot connect, error: <class 'ValueError'> (invalid literal for int() with base 16: "1:15\\n21:31:16\\n21:31:17\\n21:31:18\\n21:31:19\\n21:31:20\\n21:31:21\\n21:31:22\\n21:31:23\\n21:31:24\\n21:31:25\\n21:31:26\\n'")
+supervisor> 
+
+supervisor> reload
+error: <class 'NameError'>, name 'raw_input' is not defined: file: /home/son/local/app/Python-3.4.1/lib/python3.4/site-packages/supervisor-4.0.0_dev-py3.4.egg/supervisor/supervisorctl.py line: 848
+supervisor>
+
+[son@localhost ~]$ supervisorctl
+error: <class 'socket.gaierror'>, [Errno -2] Name or service not known: file: /home/son/local/app/Python-3.4.1/lib/python3.4/socket.py line: 530
+
+

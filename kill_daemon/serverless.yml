@@ -1,0 +1,13 @@
+service: ScaleInECSTaskCluster
+provider:
+  name: aws
+  runtime: python2.7
+  stage: production
+  region: ap-northeast-1
+functions:
+  trigger_scale_in:
+    handler: scale_handler.trigger_scale_in
+    events:
+      - schedule: rate(15 minutes)
+  kill_daemon:
+    handler: daemon_handler.kill_daemon
