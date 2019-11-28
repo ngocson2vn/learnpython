@@ -18,7 +18,7 @@
 import twitter
 import time
 
-api = twitter.Api(consumer_key='pZwwq1T6GwUoPzrRVAFw2qb6K', consumer_secret='EYbA6xGtlMtkFrYYS7PxamMQgkScvW87BUvJFnuIL96RGGTp3G', access_token_key='325382413-McKd3jE8NpAwqNKj0JllnI5EhfC5dGzYjqRQO9rC', access_token_secret='lXkqwqlSrAY6sBE2NKQsie5Fnk1yiQU4iyHPcXKpIYiQN')
+api = twitter.Api(consumer_key='PLACE_HOLDER', consumer_secret='PLACE_HOLDER', access_token_key='PLACE_HOLDER', access_token_secret='PLACE_HOLDER')
 
 start = time.time()
 i = 0
