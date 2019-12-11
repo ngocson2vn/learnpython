@@ -1,2 +1,3 @@
 # learnpython
-Learn Python
+Learn the Python programming language
+
