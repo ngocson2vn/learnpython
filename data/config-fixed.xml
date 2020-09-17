@@ -1,0 +1,122 @@
+<project>
+  <actions />
+  <description>&#20197;&#19979;&#12398;&#29702;&#30001;&#12391;&#38971;&#24230;&#12434;10&#20998;&#12362;&#12365; -&gt; 20&#20998;&#12362;&#12365;&#12395;&#19979;&#12370;&#12427; 20190120 komiyama
+&#12539;Redshift&#12364;&#12354;&#12427;&#31243;&#24230;&#38929;&#19976;&#12395;&#12394;&#12387;&#12390;&#12365;&#12383;&#12398;&#12391;&#12289;&#22810;&#23569;&#37325;&#12356;&#12463;&#12456;&#12522;&#12391;&#35440;&#12414;&#12387;&#12383;&#12367;&#12425;&#12356;&#12391;&#12399;&#21839;&#38988;&#36215;&#12365;&#12394;&#12367;&#12394;&#12387;&#12390;&#12365;&#12383;
+&#12539;&#20170;&#12398;&#38971;&#24230;&#12384;&#12392;&#12363;&#12394;&#12426;&#29436;&#23569;&#24180;&#12395;&#12394;&#12387;&#12390;&#12427;
+&#12539;Redshift&#21450;&#12403;jenkins&#12398;&#36000;&#33655;&#36605;&#28187;
+
+20190603 komiyama
+&#12373;&#12425;&#12395;&#38971;&#24230;&#12434;&#28187;&#12425;&#12375;&#12390;&#12375;&#12365;&#12356;&#20516;&#12434;&#32233;&#12417;&#12427;&#12290;
+Redshift&#12398;&#36914;&#21270;&#12395;&#12424;&#12426;&#12371;&#12371;&#12434;&#38971;&#32321;&#12395;&#30435;&#35222;&#12375;&#12394;&#12367;&#12390;&#33391;&#12367;&#12394;&#12387;&#12390;&#12356;&#12427;</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.27">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>5</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.7.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>git@github.com:FiNCDeveloper/analytics_jobs.git</url>
+        <credentialsId>b1b6666e-2f36-4d9e-baeb-d4018568d1e6</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list" />
+    <extensions />
+  </scm>
+  <assignedNode>analytics_jobs</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>H 3-16 * * *</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>## ruby gem install
+bundle install
+
+## PG parameter
+export PGHOST='finc-analytics-2nd.crntx3nmgy9e.ap-northeast-1.redshift.amazonaws.com'
+export PGPORT=5439
+export PGDATABASE=analytics
+export PGUSER=analytics_batch
+
+## exec test script
+cd $HOME/workspace/$JOB_NAME/
+ruby work/slow_query_killer.rb</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <jenkins.plugins.slack.SlackNotifier plugin="slack@2.3">
+      <authToken />
+      <baseUrl />
+      <botUser>false</botUser>
+      <commitInfoChoice>NONE</commitInfoChoice>
+      <customMessage />
+    <includeCustomMessage>false</includeCustomMessage>
+      <includeFailedTests>false</includeFailedTests>
+      <includeTestSummary>false</includeTestSummary>
+      <notifyAborted>true</notifyAborted>
+      <notifyBackToNormal>true</notifyBackToNormal>
+      <notifyFailure>true</notifyFailure>
+      <notifyNotBuilt>true</notifyNotBuilt>
+      <notifyRegression>false</notifyRegression>
+      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <notifySuccess>false</notifySuccess>
+      <notifyUnstable>false</notifyUnstable>
+      <room>#data_analytics_alert</room>
+      <startNotification>false</startNotification>
+      <teamDomain />
+      <tokenCredentialId>6db9b4f2-4aef-42ca-8aa2-a44cd069444e</tokenCredentialId></jenkins.plugins.slack.SlackNotifier>
+  </publishers>
+  <buildWrappers>
+    <ruby-proxy-object>
+      <ruby-object pluginid="rbenv" ruby-class="Jenkins::Tasks::BuildWrapperProxy">
+        <object pluginid="rbenv" ruby-class="RbenvWrapper">
+          <ruby__build__repository pluginid="rbenv" ruby-class="String">https://github.com/sstephenson/ruby-build.git</ruby__build__repository>
+          <ruby__build__revision pluginid="rbenv" ruby-class="String">master</ruby__build__revision>
+          <rbenv__root pluginid="rbenv" ruby-class="String">$HOME/.rbenv</rbenv__root>
+          <rbenv__revision pluginid="rbenv" ruby-class="String">master</rbenv__revision>
+          <ruby__configure__opts pluginid="rbenv" ruby-class="String" />
+          <rbenv__repository pluginid="rbenv" ruby-class="String">https://github.com/sstephenson/rbenv.git</rbenv__repository>
+          <version pluginid="rbenv" ruby-class="String">2.3.1</version>
+          <gem__list pluginid="rbenv" ruby-class="String">bundler,rake</gem__list>
+          <configure__opts pluginid="rbenv" ruby-class="String" />
+          <ignore__local__version pluginid="rbenv" ruby-class="FalseClass" />
+        </object>
+        <pluginid pluginid="rbenv" ruby-class="String">rbenv</pluginid>
+      </ruby-object>
+    </ruby-proxy-object>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>PGPASSWORD</name>
+          <value>{AQAAABAAAAAQrl/1X76ykqalAgb2V+n1yNQzihhSU04uyc08/2mvd9Y=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+  </buildWrappers>
+</project>
