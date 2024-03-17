@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from cookie import Cookie
 
-url = "mysql+pymysql://root:12345678@localhost/cookies"
+url = "mysql+pymysql://root:12345678@localhost/moon"
 engine = create_engine(url, echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()

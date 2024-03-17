@@ -5,6 +5,6 @@ from order import Order
 from line_item import LineItem
 
 from sqlalchemy import create_engine
-url = "mysql+pymysql://root:12345678@localhost/cookies"
+url = "mysql+pymysql://root:12345678@localhost/moon"
 engine = create_engine(url)
 Base.metadata.create_all(engine)
