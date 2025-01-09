@@ -13,7 +13,6 @@ def timing_function(some_function):
 
 	return wrapper
 
-# Python implicitly redefines `my_function = timing_function(my_function)`
 @timing_function
 def my_function():
 	num_list = []
@@ -21,6 +20,5 @@ def my_function():
 		num_list.append(num)
 	print("\nSum of all the numbers: {}".format(sum(num_list)))
 
-# At this point, the real name of `my_function` will be `wrapper`.
-print(my_function)
-print(my_function.__name__)
+# Python implicitly re-assigns my_function = timing_function(my_function)
+# print(my_function())
