@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-Add each number in an array until the sum equals the rest  of the array
+Add each number in an array until the sum equals the rest of the array
 """
 arr = [1, -2, 3, 2, 0, -1, 10, -9, 2]
 arr_sum = sum(arr)
